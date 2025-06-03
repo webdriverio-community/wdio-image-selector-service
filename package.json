@@ -1,0 +1,25 @@
+{
+  "name": "wdio-visual-click-service",
+  "version": "0.1.0",
+  "description": "A WebdriverIO service for visual clicking using image matching",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "serve:example": "serve ./example -l 3000",
+    "test:example": "cd example && wdio run wdio.conf.ts",
+    "build-and-test": "npm run build && npm run test:example"
+  },
+  "dependencies": {
+    "@u4/opencv4nodejs": "^7.1.2",
+    "@wdio/globals": "^9.14.0",
+    "pixelmatch": "^7.1.0",
+    "pngjs": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/pngjs": "^6.0.5",
+    "@wdio/cli": "^9.15.0",
+    "@wdio/types": "^9.14.0",
+    "serve": "^14.2.4",
+    "typescript": "^5.0.0"
+  }
+}

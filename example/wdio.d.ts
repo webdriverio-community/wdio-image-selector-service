@@ -5,6 +5,7 @@ declare namespace WebdriverIO {
             options?: {
                 scales?: number[];
                 confidence?: number;
+                engine?: 'opencv' | 'fallback' | 'auto';
             }
         ): Promise<void>;
     }

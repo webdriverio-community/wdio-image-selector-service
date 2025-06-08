@@ -1,23 +1,37 @@
-import {browser, expect} from '@wdio/globals'
+import { browser, expect } from '@wdio/globals';
 
-describe('Avocado Game', () => {
-    // it('should load the game page', async () => {
-    //     await browser.url('/');
-    //     const canvas = $('#gameCanvas');
-    //     await expect(canvas).toBeDisplayed();
-    // });
+describe('Whack-A-Guac Game', () => {
+    const avocadoImagePath = './assets/avocado.png';
+    const initialScore = 'Score: 0';
+    const avocadoScore = 'Score: 1';
 
-    it('should click on the canvas and increase score', async () => {
+    const getScoreText = async () => {
+        return await $('#scoreDisplay').getText();
+    };
+
+    beforeEach(async () => {
         await browser.url('/');
-        await browser.pause(4000);
-        console.log("±±±±±±±±±±±±±±±±±±±±±±±±±±±±")
-        await browser.clickByMatchingImage('./assets/trap_test.png');
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        await browser.pause(8000);
-        await browser.clickByMatchingImage('./assets/trap_test.png');
-        await browser.clickByMatchingImage('./assets/trap_test.png');
-        await browser.pause(8000);
-        await browser.clickByMatchingImage('./assets/trap_test.png');
+        // Supposedly no elements in the canvas exist so we need to wait for the game to load
+        await browser.pause(3000);
+    });
+
+    it('should correctly click the trap using OpenCV engine and update score', async () => {
+        const scoreBefore = await getScoreText();
+        expect(scoreBefore).toBe(initialScore);
+
+        await browser.clickByMatchingImage(avocadoImagePath, { engine: 'opencv' });
+
+        const scoreAfter = await getScoreText();
+        expect(scoreAfter).toBe(avocadoScore);
+    });
+
+    it('should correctly click the trap using Fallback engine and update score', async () => {
+        const scoreBefore = await getScoreText();
+        expect(scoreBefore).toBe(initialScore);
+
+        await browser.clickByMatchingImage(avocadoImagePath, { engine: 'fallback' });
+
+        const scoreAfter = await getScoreText();
+        expect(scoreAfter).toBe(avocadoScore);
     });
 });
-

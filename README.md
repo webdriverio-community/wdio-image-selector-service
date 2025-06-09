@@ -9,7 +9,7 @@ Supports both OpenCV-based matching (for high-performance template matching) and
 
 ✅ Configurable confidence threshold
 
-✅ Optional use of OpenCV for faster and more accurate matching
+✅ **Optional** use of OpenCV for faster and more accurate matching
 
 ✅ Fallback engine using pixel-level comparison
 
@@ -22,12 +22,25 @@ Supports both OpenCV-based matching (for high-performance template matching) and
 ## 📦 Installation
 To use this service, you need to install the `@u4/opencv4nodejs` package, which is a dependency for image processing as well as the `pngjs`, `pixelmatch`, and `jimp` libraries for fallback functionality. You can install them using npm:
 ```bash
-npm install @u4/opencv4nodejs pngjs pixelmatch jimp
+npm install
 ```
-If you are using a macOS system, you may also need to install OpenCV via Homebrew:
+
+## Optional: Enable OpenCV Support
+To enable OpenCV-based image matching (faster and more accurate), you’ll also need @u4/opencv4nodejs.
+
+On macOS:
+
 ```bash
 brew install opencv
+````
+#### Then set environment variables manually and install:
+```export OPENCV4NODEJS_DISABLE_AUTOBUILD=1
+export OPENCV_INCLUDE_DIR=$(brew --prefix opencv)/include/opencv4
+export OPENCV_LIB_DIR=$(brew --prefix opencv)/lib
+export OPENCV_BIN_DIR=$(brew --prefix opencv)/bin
+npm install 
 ```
+⚠️ If OpenCV is unavailable or fails to build, the service will automatically fall back to the pixelmatch engine.
 
 ## 🛠️ Usage
 

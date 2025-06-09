@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+*
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: ⬇️ Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: 🐢 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: 🧰 Manually install OpenCV to ensure that tests will run
+        run: |
+          brew install opencv@4
+
+      - name: 📦 Export OpenCV Environment Variables
+        run: |
+          echo "OPENCV_INCLUDE_DIR=$(brew --prefix opencv)/include/opencv4" >> $GITHUB_ENV
+          echo "OPENCV_LIB_DIR=$(brew --prefix opencv)/lib" >> $GITHUB_ENV
+          echo "OPENCV_BIN_DIR=$(brew --prefix opencv)/bin" >> $GITHUB_ENV
+
+      - name: ⬇️ Install Dependencies
+        run: pnpm install
+
+      - name: 🏗️ Build
+        run: pnpm run build
+
+      - name: 🚀 Serve Canvas App in Background
+        run: |
+          pnpm run serve:example 
+
+      - name: 🧪 Run WebdriverIO Tests
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: pnpm run test:example

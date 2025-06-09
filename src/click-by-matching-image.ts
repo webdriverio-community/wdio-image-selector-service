@@ -6,7 +6,7 @@ import {Jimp} from 'jimp';
 
 let cv: typeof import('@u4/opencv4nodejs') | null = null;
 try {
-    cv = require('@u4/opencv4nodejs');
+    cv = await import('@u4/opencv4nodejs');
 } catch (e) {
     console.warn('OpenCV not available, fallback engine will be used if needed.');
 }

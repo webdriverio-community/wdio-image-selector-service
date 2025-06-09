@@ -4,8 +4,10 @@ import pixelmatch from 'pixelmatch';
 
 import {Jimp} from 'jimp';
 
+// @ts-ignore: opencv is optional and may not be installed
 let cv: typeof import('@u4/opencv4nodejs') | null = null;
 try {
+    // @ts-ignore: opencv is optional and may not be installed
     cv = await import('@u4/opencv4nodejs');
 } catch (e) {
     console.warn('OpenCV not available, fallback engine will be used if needed.');

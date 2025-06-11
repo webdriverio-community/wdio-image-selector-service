@@ -28,23 +28,30 @@ jobs:
 
       - name: 🧰 Manually install OpenCV to ensure that tests will run
         run: |
-          brew install opencv@4
+          brew install opencv@4 cmake pkg-config
 
       - name: 📦 Export OpenCV Environment Variables
         run: |
-          echo "OPENCV_INCLUDE_DIR=$(brew --prefix opencv)/include/opencv4" >> $GITHUB_ENV
-          echo "OPENCV_LIB_DIR=$(brew --prefix opencv)/lib" >> $GITHUB_ENV
-          echo "OPENCV_BIN_DIR=$(brew --prefix opencv)/bin" >> $GITHUB_ENV
+          echo "OPENCV4NODEJS_DISABLE_AUTOBUILD=true" >> $GITHUB_ENV
+          echo "OPENCV4NODEJS_INCLUDE_DIR=$(brew --prefix opencv@4)/include/opencv4" >> $GITHUB_ENV
+          echo "OPENCV4NODEJS_LIB_DIR=$(brew --prefix opencv@4)/lib"     >> $GITHUB_ENV
+          echo "OPENCV4NODEJS_BIN_DIR=$(brew --prefix opencv@4)/bin"     >> $GITHUB_ENV
 
-      - name: ⬇️ Install Dependencies
-        run: pnpm install
+      - name: ⬇️ Install Dependencies including scripts required for opencv
+        run: pnpm install --ignore-scripts=false
 
       - name: 🏗️ Build
         run: pnpm run build
 
-      - name: 🚀 Serve Canvas App in Background
-        run: |
-          pnpm run serve:example 
+      - name: Cd and Install dependencies to Example Directory
+        run: cd example && pnpm install --ignore-scripts=false
+
+      - name: 🚀 Build Example
+        run: pnpm run build:example
+
+      - name: Serve Example
+        run: pnpm run serve:example &
+          npx wait-on http://localhost:3000
 
       - name: 🧪 Run WebdriverIO Tests
         uses: GabrielBB/xvfb-action@v1

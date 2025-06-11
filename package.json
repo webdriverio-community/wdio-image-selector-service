@@ -13,6 +13,7 @@
   "scripts": {
     "build": "tsc",
     "serve:example": "serve ./example -l 3000",
+    "build:example": "cd example && npm run build",
     "test:example": "cd example && wdio run wdio.conf.ts",
     "build-and-test": "npm run build && npm run test:example"
   },
@@ -23,8 +24,12 @@
     "pngjs": "^7.0.0"
   },
   "devDependencies": {
+    "@types/node": "^24.0.0",
     "@types/pngjs": "^6.0.5",
     "@wdio/cli": "^9.15.0",
+    "@wdio/local-runner": "^9.15.0",
+    "@wdio/mocha-framework": "^9.15.0",
+    "@wdio/spec-reporter": "^9.15.0",
     "@wdio/types": "^9.14.0",
     "serve": "^14.2.4",
     "typescript": "^5.0.0"

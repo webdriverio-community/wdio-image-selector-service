@@ -1,3 +1,4 @@
+// @ts-ignore
 import ClickByMatchingImageService from '../dist/index.js';
 
 export const config: WebdriverIO.Config = {

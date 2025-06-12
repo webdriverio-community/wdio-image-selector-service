@@ -6,15 +6,18 @@ import {Jimp} from 'jimp';
 
 // @ts-ignore: opencv is optional and may not be installed
 let cv: typeof import('@u4/opencv4nodejs') | null = null;
-try {
-    // @ts-ignore: opencv is optional and may not be installed
-    cv = await import('@u4/opencv4nodejs');
-} catch (e) {
-    console.warn('OpenCV not available, fallback engine will be used if needed.');
-}
 
 export class ClickByMatchingImageService {
-    before() {
+    async before() {
+        try {
+            // note: now inside an async method, top-level await error disappears
+            // @ts-ignore: opencv is optional
+            cv = await import('@u4/opencv4nodejs');
+            console.log('[ClickByMatchingImage] OpenCV engine available.');
+        } catch {
+            console.warn('OpenCV not available, fallback engine will be used if needed.');
+        }
+
         browser.addCommand('clickByMatchingImage', async (
             referenceImagePath: string,
             options?: {

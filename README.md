@@ -3,6 +3,7 @@
 A WebdriverIO service that allows you to locate and click on-screen elements by matching them against a reference image.
 
 Supports both OpenCV-based matching (for high-performance template matching) and a fallback engine using pixelmatch and Jimp.
+
 ## ✨ Features
 
 ✅ Multiscale template matching (customizable scales)
@@ -20,19 +21,32 @@ Supports both OpenCV-based matching (for high-performance template matching) and
 
 
 ## 📦 Installation
-To use this service, you need to install the `@u4/opencv4nodejs` package, which is a dependency for image processing as well as the `pngjs`, `pixelmatch`, and `jimp` libraries for fallback functionality. You can install them using npm:
+To use this service, you need to install `wdio-visual-click-service`, e.g.:
 ```bash
-npm install
+npm install wdio-visual-click-service
 ```
 
-## Optional: Enable OpenCV Support
-To enable OpenCV-based image matching (faster and more accurate), you’ll also need @u4/opencv4nodejs.
+Then add the service to your `wdio.conf.ts`:
+
+```ts
+export const config: WebdriverIO.Config = {
+  // ...
+  services: ['visual-click'],
+  // ...
+}
+```
+
+Once set your `browser` instance will now have an additional command called `clickByMatchingImage`.
+
+### Optional: Enable OpenCV Support
+This package uses `pngjs`, `pixelmatch`, and `jimp` for image processing which will be installed by default. If you want to enable OpenCV-based image matching (faster and more accurate), you’ll also need @u4/opencv4nodejs.
 
 On macOS:
 
 ```bash
 brew install opencv
-````
+```
+
 #### Then set environment variables manually and install:
 ```export OPENCV4NODEJS_DISABLE_AUTOBUILD=1
 export OPENCV_INCLUDE_DIR=$(brew --prefix opencv)/include/opencv4

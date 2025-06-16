@@ -71,7 +71,8 @@ jobs:
             --ci \
             --npm.skipChecks \
             --no-git.requireCleanWorkingDir \
-            --npm.tag=${{ github.event.inputs.distTag }}
+            --npm.tag=${{ github.event.inputs.distTag }} \
+            --npm.publishConfig.access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -86,7 +87,8 @@ jobs:
             --no-git.requireCleanWorkingDir \
             --preRelease=alpha \
             --github.preRelease \
-            --npm.tag=next
+            --npm.tag=next \
+            --npm.publishConfig.access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

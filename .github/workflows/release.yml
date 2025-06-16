@@ -39,43 +39,54 @@ jobs:
       - name: ⬇️ Checkout Code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: 📦 Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
       - name: 🐢 Setup Node
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
 
-      - name: NPM Setup
-        run: |
-          npm set registry "https://registry.npmjs.org/"
-          npm set //registry.npmjs.org/:_authToken $NPM_TOKEN
-          npm whoami
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
-      - name: Git Setup
+      - name: 📁 Auth Setup for NPM
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+
+      - name: 🛠️ Git Setup
         run: |
           git config --global user.email "bot@webdriver.io"
           git config --global user.name "WebdriverIO Release Bot"
 
-      - name: Install Dependencies
+      - name: 📦 Install Dependencies
         run: pnpm install
 
-      - name: Build
+      - name: 🏗️ Build
         run: pnpm run build
 
-      - name: Release
-        run: npx release-it ${{github.event.inputs.releaseType}} --github.release --ci --npm.skipChecks --no-git.requireCleanWorkingDir --npm.tag=${{github.event.inputs.distTag}}
+      - name: 🚀 Release
+        run: |
+          npx release-it ${{ github.event.inputs.releaseType }} \
+            --github.release \
+            --ci \
+            --npm.skipChecks \
+            --no-git.requireCleanWorkingDir \
+            --npm.tag=${{ github.event.inputs.distTag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ github.event.inputs.preRelease == 'no' }}
 
-      - name: Pre-Release
-        run: npx release-it ${{github.event.inputs.releaseType}} --github.release --ci --npm.skipChecks --no-git.requireCleanWorkingDir --preRelease=alpha --github.preRelease --npm.tag=next
+      - name: 🚀 Pre-Release
+        run: |
+          npx release-it ${{ github.event.inputs.releaseType }} \
+            --github.release \
+            --ci \
+            --npm.skipChecks \
+            --no-git.requireCleanWorkingDir \
+            --preRelease=alpha \
+            --github.preRelease \
+            --npm.tag=next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
